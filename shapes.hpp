@@ -4,8 +4,12 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
+void drawSidePlat();
+void drawMidPlat();
+
+
 void draw_axis(int n);
-void drawPlatform();
+void generatePlatform();
 
 
 #endif

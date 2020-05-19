@@ -3,8 +3,11 @@ CXX = g++
 CXXFLAGS = -std=c++17 -g -Wall -Wextra
 LDLIBS = -lglut -lGLU -lGL -lm
 
-$(PROGRAM) : shapes.o callbackFunctions.o main.o 
+$(PROGRAM) : shapes.o callbackFunctions.o helperFunctions.o main.o 
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS) && ./Knock
+
+helperFunctions.o: helperFunctions.cpp helperFunctions.hpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDLIBS)
 
 callbackFunctions.o: callbackFunctions.cpp callbackFunctions.hpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $< $(LDLIBS)

@@ -1,4 +1,6 @@
 #include "shapes.hpp"
+#include "helperFunctions.hpp"
+#include <cmath>
 
 void draw_axis(int n)
 {
@@ -29,10 +31,64 @@ void draw_axis(int n)
   glPopMatrix();
 }
 
-void drawPlatform()
+void drawPolygon()
 {
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  glBegin(GL_POLYGON);
+    glVertex3f(0.5, 0, 0.5);
+    glVertex3f(-0.5, 0, 0.5);
+    glVertex3f(-0.5, 0, -0.5);
+    glVertex3f(0.5, 0, -0.5);
+  glEnd(); 
+}
+
+void drawSidePlat()
+{
+  double clipPlaneLeft[] = {0, 1, 1, 0};
+  glClipPlane(GL_CLIP_PLANE0, clipPlaneLeft);
+
+  glEnable(GL_CLIP_PLANE0);  
+  glutSolidCube(1);
+  glDisable(GL_CLIP_PLANE0);
+
   glPushMatrix();
-    glScalef(1, 0.2, 1);
-    glutSolidCube(1);
+    glRotatef(45, 1, 0, 0);
+    glScalef(1, 1, sqrt(2));
+    drawPolygon();
   glPopMatrix();
+
+}
+
+void drawMidPlat()
+{
+  glutSolidCube(1);
+}
+
+void generatePlatform()
+{
+  
+  setMaterialColor(0.000, 0.749, 1.000);
+
+  glPushMatrix();
+    glTranslatef(240, 0, 0);
+    glScalef(500, 0.6, 4);
+    drawMidPlat();
+  glPopMatrix();
+  
+  glPushMatrix();
+    glTranslatef(240, 0, -3.5);
+    glRotatef(180, 0, 0, 1);
+    glScalef(500, 0.6, 3);
+    drawSidePlat();
+  glPopMatrix();
+  
+  glPushMatrix();
+    glTranslatef(240, 0, +3.5);
+    glRotatef(180, 0, 0, 1);
+    glRotatef(180, 0, 1, 0);
+    glScalef(500, 0.6, 3);
+    drawSidePlat();
+  glPopMatrix();
+  
+
 }
