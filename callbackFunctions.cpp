@@ -1,9 +1,9 @@
 #include "callbackFunctions.hpp"
 #include "shapes.hpp"
 
-float cam_param_y = 2;
-float cam_param_x = -5;
-float cam_param_z = 0;
+float cam_param_y = 12;
+float cam_param_x = 5;
+float cam_param_z = 10;
 float cam_increment = 0.2;
 
 void initLights()
@@ -12,10 +12,10 @@ void initLights()
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
 
-  GLfloat light_position[] = { 2, 6, 2, 0 };
+  GLfloat light_position[] = { 12, 16, 12, 0 };
   GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
 	GLfloat light_diffuse[] = { 0.9, 0.9, 0.9, 1 };
-	GLfloat light_specular[] = { 0.7, 0.7, 0.7, 1 };
+	GLfloat light_specular[] = { 0.3, 0.3, 0.3, 1 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
@@ -44,28 +44,28 @@ void onKeyboardSpecial(int key, int x, int y)
   switch(key)
   {
     case GLUT_KEY_UP:
-      if(cam_param_y < 5)
+      if(cam_param_y < 100)
       {
         cam_param_y += cam_increment;
         glutPostRedisplay();
       }
       break;
     case GLUT_KEY_DOWN:
-      if(cam_param_y > 1.4)
+      if(cam_param_y > -100)
       {
         cam_param_y -= cam_increment;
         glutPostRedisplay();
       }
       break;
     case GLUT_KEY_RIGHT:
-      if(cam_param_z < 4)
+      if(cam_param_z < 100)
       {
         cam_param_z += cam_increment;
         glutPostRedisplay();
       }
       break;
     case GLUT_KEY_LEFT:
-      if(cam_param_z > -4)
+      if(cam_param_z > -100)
       {
         cam_param_z -= cam_increment;
         glutPostRedisplay();
@@ -84,14 +84,14 @@ void onKeyboard(unsigned char key, int x, int y)
       exit(0);
       break;
     case '+':
-      if(cam_param_x < -1.8)
+      if(cam_param_x < 100)
       {
         cam_param_x += cam_increment;
         glutPostRedisplay();
       }
       break;
     case '-':
-      if(cam_param_x > -11.8)
+      if(cam_param_x > -100)
       {
         cam_param_x -= cam_increment;
         glutPostRedisplay();
@@ -121,13 +121,14 @@ void onDisplay(void)
 	glLoadIdentity();
 
   gluLookAt(cam_param_x, cam_param_y, 0+cam_param_z, 0, 0, 0, 0, 1, 0);
-
+  
   
 
-  draw_axis(20);
+  draw_axis(50);
     
   generatePlatform();
 
+  generateCatto();
 
   glutSwapBuffers();
 }

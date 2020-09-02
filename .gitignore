@@ -30,3 +30,11 @@
 *.exe
 *.out
 *.app
+
+# VSCode workspace
+
+ws.code-workspace
+
+# Temporary
+
+resources/*
