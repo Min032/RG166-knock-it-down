@@ -6,6 +6,7 @@
 
 #include <string>
 
+
 void setMaterialColor(GLfloat r, GLfloat g, GLfloat b);
 
 

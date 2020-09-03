@@ -1,4 +1,5 @@
 #include "callbackFunctions.hpp"
+#include "helperFunctions.hpp"
 #include "shapes.hpp"
 
 float cam_param_y = 12;
@@ -10,17 +11,24 @@ void initLights()
 {
 
   glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
 
   GLfloat light_position[] = { 12, 16, 12, 0 };
   GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
 	GLfloat light_diffuse[] = { 0.9, 0.9, 0.9, 1 };
-	GLfloat light_specular[] = { 0.3, 0.3, 0.3, 1 };
+	GLfloat light_specular[] = { 0, 0, 0, 1 };
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
   glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+  GLfloat light_specular1[] = { 0.2, 0.2, 0.2, 1 };
+
+  glLightfv(GL_LIGHT1, GL_AMBIENT, light_ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light_diffuse);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light_specular1);
+  glLightfv(GL_LIGHT1, GL_POSITION, light_position);
+
 }
 
 void initMaterial()
@@ -38,6 +46,7 @@ void initMaterial()
 
   glShadeModel(GL_SMOOTH);
 }
+
 
 void onKeyboardSpecial(int key, int x, int y) 
 {
@@ -114,6 +123,7 @@ void onDisplay(void)
 
   initLights();
   initMaterial();  
+  initTextures();
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -122,13 +132,18 @@ void onDisplay(void)
 
   gluLookAt(cam_param_x, cam_param_y, 0+cam_param_z, 0, 0, 0, 0, 1, 0);
   
-  
+  glEnable(GL_LIGHT1);  
 
   draw_axis(50);
     
   generatePlatform();
 
+
+  glDisable(GL_LIGHT1);
+  glEnable(GL_LIGHT0);
   generateCatto();
+  glDisable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
 
   glutSwapBuffers();
 }

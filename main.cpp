@@ -45,5 +45,6 @@ void initEnables()
   glEnable(GL_LINE_SMOOTH);
   glEnable(GL_POINT_SMOOTH);
   glEnable(GL_POLYGON_SMOOTH);
+  glEnable(GL_TEXTURE_2D);
 
 }
