@@ -37,4 +37,4 @@ ws.code-workspace
 
 # Temporary
 
-resources/*
+resources/misc/*
