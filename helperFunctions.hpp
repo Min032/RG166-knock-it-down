@@ -7,8 +7,7 @@
 #include <string>
 
 
-void setMaterialColor(GLfloat r, GLfloat g, GLfloat b);
-
-
+void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+void drawHelveticaString(char *str, double x, double y, double z);
 
 #endif

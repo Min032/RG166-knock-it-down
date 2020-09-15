@@ -105,10 +105,33 @@ void drawTriPolygon(float v1x, float v1y, float v1z,
 
 }
 
+void generateMenu() {
+
+  drawHelveticaString("Welcome to Knock it down!", 3.7, 4.3, 3.7);
+  drawHelveticaString("[Spacebar] for start", 4, 3.9, 4);
+  drawHelveticaString("[P] for pause", 4, 3.7, 4);
+  drawHelveticaString("[Esc] for exit", 4, 3.5, 4);
+
+  glEnable(GL_BLEND);
+  
+  setMaterialColor(0.1, 0.1, 0.1, 0.8);
+  glPushMatrix();
+    glTranslatef(0, 3.5, 0);
+    glTranslatef(2.5, 0, 0);
+    glTranslatef(0, 0, 2);
+    glRotatef(-40, 0, 1, 0);
+    glRotatef(50, 0, 0, 1);
+    glScalef(0.2, 7, 15);
+    glutSolidCube(1);
+  glPopMatrix();
+  glDisable(GL_BLEND);
+    
+}
+
 void generatePlatform()
 {
   
-  setMaterialColor(0.2, 0.2, 0.2);
+  setMaterialColor(0.2, 0.2, 0.2, 1);
 
   // Enable texture coordinates generation
   glEnable(GL_TEXTURE_GEN_S); 
@@ -191,7 +214,7 @@ void makeLegAndPaw() {
 void generateCatto() 
 {
   //setMaterialColor(0.5, 0.5, 0.5);
-  setMaterialColor(0.1, 0.1, 0.1);
+  setMaterialColor(0.1, 0.1, 0.1, 1);
   
   // Enable texture coordinates generation
   glEnable(GL_TEXTURE_GEN_S); 
@@ -288,7 +311,7 @@ void generateCatto()
   glDisable(GL_TEXTURE_GEN_T);
 
   // Smile
-  setMaterialColor(0, 0, 0);
+  setMaterialColor(0, 0, 0, 1);
 
   glPushMatrix();
     glTranslatef(1.03, 1.9, 0.05);

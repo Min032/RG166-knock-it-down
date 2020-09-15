@@ -7,13 +7,18 @@
 #define TIMER0_ID 0
 #define TIMER0_INTERVAL 25
 
+#define TIMER1_ID 1
+#define TIMER1_INTERVAL 25
+
 #define INITIAL_FRONT_ANGLE 5
 #define INITIAL_BACK_ANGLE 0
 
-float cam_param_y = 4;
-float cam_param_x = 6;
-float cam_param_z = 5;
-float cam_increment = 0.2;
+double cam_param_y = 5;
+double cam_param_x = 6;
+double cam_param_z = 5;
+double cam_increment = 0.2;
+
+double rotation_y_menu_param = 0;
 
 int game_ongoing = 0;
 
@@ -28,12 +33,14 @@ double jump_param_increment = 0.11;
 
 double time_passed = 0;
 
+double score = 0;
+
 void initLights()
 {
 
   glEnable(GL_LIGHTING);
 
-  GLfloat light_position[] = { 12, 16, 12, 0 };
+  GLfloat light_position[] = { 12, 16, 10, 0 };
   GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
 	GLfloat light_diffuse[] = { 0.9, 0.9, 0.9, 1 };
 	GLfloat light_specular[] = { 0, 0, 0, 1 };
@@ -55,7 +62,7 @@ void initLights()
 void initMaterial()
 {
   // Material parameters
-  GLfloat ambient_coeffs[] = { 0.8, 0.8, 0.8, 1 };
+  GLfloat ambient_coeffs[] = { 0.15, 0.15, 0.15, 1 };
 	GLfloat diffuse_coeffs[] = { 1, 1, 1, 1 };
 	GLfloat specular_coeffs[] = { 1, 1, 1, 1 };
   GLfloat shininess = 30;
@@ -73,6 +80,12 @@ void initParams() {
   back_legs_angle_param = 0;
   front_legs_angle_increment = 8;
   back_legs_angle_increment = 8;
+
+  jump_param = 0;
+  jump_param_increment = 0.11;
+
+  score = 0;
+
   time_passed = 0;
   game_ongoing = 0;
 }
@@ -111,6 +124,21 @@ void on_timer0(int id) {
     if (game_ongoing) {
       glutTimerFunc(TIMER0_INTERVAL, on_timer0, TIMER0_ID);
     }
+}
+
+void on_timer1(int id) {
+  if (id != TIMER1_ID) return;
+
+  if(rotation_y_menu_param >= 360)
+    rotation_y_menu_param = 0;
+
+  rotation_y_menu_param += 0.4;
+
+  glutPostRedisplay();
+
+  if (!game_ongoing) {
+      glutTimerFunc(TIMER1_INTERVAL, on_timer0, TIMER1_ID);
+  }
 }
 
 void onKeyboardSpecial(int key, int x, int y) 
@@ -180,7 +208,11 @@ void onKeyboard(unsigned char key, int x, int y)
       break;
     case 'p':
     case 'P':
-      game_ongoing = 0;
+      if(game_ongoing)
+      {
+        glutTimerFunc(TIMER1_INTERVAL, on_timer1, TIMER1_ID);
+        game_ongoing = 0;
+      }
       break;
     case 'r':
     case 'R':
@@ -212,13 +244,28 @@ void onDisplay(void)
   glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-  gluLookAt(cam_param_x, cam_param_y, cam_param_z, 0, 0, 0, 0, 1, 0);
-  
-  glEnable(GL_LIGHT1);  
+  if(!game_ongoing)
+  {
+    gluLookAt(6, 5, 5, 0, 0, 0, 0, 1, 0);
+  }
+  else 
+    gluLookAt(-9, 6, 0, 0, 0, 0, 0, 1, 0);
 
+  glEnable(GL_LIGHT1);
+
+  glPushMatrix();
   draw_axis(50);
+  glPopMatrix();
+
+
+  if(!game_ongoing)
+  {
+    glutTimerFunc(TIMER1_INTERVAL, on_timer1, TIMER1_ID);
+  }
     
-  
+  glPushMatrix();
+  if(!game_ongoing)
+    glRotatef(rotation_y_menu_param, 0, 1, 0);
   generatePlatform();
 
   glDisable(GL_LIGHT1);
@@ -226,6 +273,16 @@ void onDisplay(void)
   generateMovingCatto();
   glDisable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
+
+  glPopMatrix();
+
+  
+
+  glPushMatrix();
+    if(!game_ongoing) {
+      generateMenu();
+    }
+  glPopMatrix();
 
   glutSwapBuffers();
 }

@@ -19,6 +19,8 @@ void clipTailBody();
 void clipTailBall();
 void clipSmile();
 
+void generateMenu();
+
 void generatePlatform();
 void generateCatto();
 void generateMovingCatto();
