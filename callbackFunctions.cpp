@@ -1,11 +1,32 @@
 #include "callbackFunctions.hpp"
 #include "helperFunctions.hpp"
 #include "shapes.hpp"
+#include <iostream>
+#include <cmath>
+
+#define TIMER0_ID 0
+#define TIMER0_INTERVAL 25
+
+#define INITIAL_FRONT_ANGLE 5
+#define INITIAL_BACK_ANGLE 0
 
 float cam_param_y = 12;
 float cam_param_x = 5;
 float cam_param_z = 10;
 float cam_increment = 0.2;
+
+int game_ongoing = 0;
+
+double front_legs_angle_param = 0;
+double back_legs_angle_param = 0;
+
+double front_legs_angle_increment = 5;
+double back_legs_angle_increment = 5;
+
+double jump_param = 0;
+double jump_param_increment = 0.08;
+
+double time_passed = 0;
 
 void initLights()
 {
@@ -47,6 +68,50 @@ void initMaterial()
   glShadeModel(GL_SMOOTH);
 }
 
+void initParams() {
+  front_legs_angle_param = 0;
+  front_legs_angle_increment = 5;
+  back_legs_angle_param = 0;
+  back_legs_angle_increment = 5;
+  time_passed = 0;
+  game_ongoing = 0;
+}
+
+void on_timer0(int id) {
+  if (id != TIMER0_ID) return;
+
+    // TODO: check if game should stop
+
+    if(front_legs_angle_param >= 18)
+      front_legs_angle_increment = -5;
+    
+    if(front_legs_angle_param <= -40)
+      front_legs_angle_increment = 5;
+    
+    front_legs_angle_param += front_legs_angle_increment;
+
+    if(back_legs_angle_param >= 18)
+      back_legs_angle_increment = -5;
+    
+    if(back_legs_angle_param <= -40)
+      back_legs_angle_increment = 5;
+
+    back_legs_angle_param += front_legs_angle_increment;
+    
+    if(jump_param >= 1)
+      jump_param_increment = -0.1;
+
+    if(jump_param <= 0)
+      jump_param_increment = 0.1;
+
+    jump_param += jump_param_increment;
+
+    glutPostRedisplay();
+
+    if (game_ongoing) {
+      glutTimerFunc(TIMER0_INTERVAL, on_timer0, TIMER0_ID);
+    }
+}
 
 void onKeyboardSpecial(int key, int x, int y) 
 {
@@ -106,6 +171,22 @@ void onKeyboard(unsigned char key, int x, int y)
         glutPostRedisplay();
       }
       break;
+    case 32:
+      if(!game_ongoing)
+      {
+        glutTimerFunc(TIMER0_INTERVAL, on_timer0, TIMER0_ID);
+        game_ongoing = 1;
+      }
+      break;
+    case 'p':
+    case 'P':
+      game_ongoing = 0;
+      break;
+    case 'r':
+    case 'R':
+      initParams();
+      glutPostRedisplay();
+      break;
   }
 }
 
@@ -117,6 +198,7 @@ void onReshape(int width, int height)
 	gluPerspective(60, width/height, 1, 1000);
   
 }
+
 
 void onDisplay(void)
 {
@@ -138,10 +220,9 @@ void onDisplay(void)
     
   generatePlatform();
 
-
   glDisable(GL_LIGHT1);
   glEnable(GL_LIGHT0);
-  generateCatto();
+  generateMovingCatto();
   glDisable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
 

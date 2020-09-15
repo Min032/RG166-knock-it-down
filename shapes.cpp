@@ -129,7 +129,6 @@ void generatePlatform()
   glDisable(GL_TEXTURE_GEN_T);
 }
 
-
 void clipTailBody()
 {
   double clip_plane0[] = {0, -1, 0, 0};
@@ -157,6 +156,26 @@ void clipTailBall()
   
 }
 
+void makeLegAndPaw() {
+
+  // Leg
+
+  glPushMatrix();
+    glTranslatef(0, -0.7, 0);
+    glScalef(0.1, 0.7, 0.1);
+    glutSolidSphere(1, 50, 50);
+  glPopMatrix();
+
+  // Paw
+
+  glPushMatrix();
+    glTranslatef(0.05, -1.3, 0);
+    glScalef(0.12, 0.1, 0.09);
+    glutSolidSphere(1, 50, 50);
+  glPopMatrix();
+
+}
+
 void generateCatto() 
 {
   //setMaterialColor(0.5, 0.5, 0.5);
@@ -172,73 +191,49 @@ void generateCatto()
   // Body
 
   glPushMatrix();
-    glTranslatef(0, 1.5, 0);
+    glTranslatef(0, 1.6, 0);
     glScalef(0.8, 0.6, 0.4);
     glutSolidSphere(1, 50, 50);
   glPopMatrix();
 
-  // Legs
-  glPushMatrix();
-    glTranslatef(-0.45, 1, 0.3);
-    glScalef(0.1, 0.7, 0.1);
-    glutSolidSphere(1, 50, 50);
-  glPopMatrix();
-
+  // Back legs
 
   glPushMatrix();
-    glTranslatef(0.4, 1, 0.3);
-    glScalef(0.1, 0.7, 0.1);
-    glutSolidSphere(1, 50, 50);
+    glTranslatef(-0.4, 1.7, 0.3);
+    glRotatef(back_legs_angle_param, 0, 0, 1);
+    makeLegAndPaw();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(0.4, 1, -0.3);
-    glScalef(0.1, 0.7, 0.1);
-    glutSolidSphere(1, 50, 50);
+    glTranslatef(-0.4, 1.7, -0.3);
+    glRotatef(back_legs_angle_param, 0, 0, 1);
+    makeLegAndPaw();
+  glPopMatrix();
+
+  // Front legs
+
+  glPushMatrix();
+    glTranslatef(0.4, 1.7, 0.3);
+    glRotatef(-front_legs_angle_param, 0, 0, 1);
+    makeLegAndPaw();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(-0.45, 1, -0.3);
-    glScalef(0.1, 0.7, 0.1);
-    glutSolidSphere(1, 50, 50);
+    glTranslatef(0.4, 1.7, -0.3);
+    glRotatef(-front_legs_angle_param, 0, 0, 1);
+    makeLegAndPaw();
   glPopMatrix();
-
-  // Paws
-  glPushMatrix();
-    glTranslatef(-0.35, 0.35, 0.3);
-    glScalef(0.12, 0.1, 0.1);
-    glutSolidSphere(1, 50, 50);
-  glPopMatrix();
-
-  glPushMatrix();
-    glTranslatef(0.5, 0.35, 0.3);
-    glScalef(0.12, 0.1, 0.1);
-    glutSolidSphere(1, 50, 50);
-  glPopMatrix();
-
-  glPushMatrix();
-    glTranslatef(0.5, 0.35, -0.3);
-    glScalef(0.12, 0.1, 0.1);
-    glutSolidSphere(1, 50, 50);
-  glPopMatrix();
-
-  glPushMatrix();
-    glTranslatef(-0.35, 0.35, -0.3);
-    glScalef(0.12, 0.1, 0.1);
-    glutSolidSphere(1, 50, 50);
-  glPopMatrix();
-
 
   // Head
   glPushMatrix();
-    glTranslatef(0.8, 1.9, 0);
-    glScalef(0.35, 0.4, 0.3);
+    glTranslatef(0.8, 2, 0);
+    glScalef(0.25, 0.4, 0.3);
     glutSolidSphere(1, 50, 50);
   glPopMatrix();
 
   // Ears
   glPushMatrix();
-    glTranslatef(0.85, 2.2, -0.15);
+    glTranslatef(0.85, 2.3, -0.15);
     glRotatef(-30, 1, 0, 0);
     glScalef(0.3, 1.3, 1);
     glRotatef(90, 0, 0, 1);
@@ -247,7 +242,7 @@ void generateCatto()
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(0.85, 2.2, 0.15);
+    glTranslatef(0.85, 2.3, 0.15);
     glRotatef(30, 1, 0, 0);
     glScalef(0.3, 1.3, 1);
     glRotatef(90, 0, 0, 1);
@@ -258,19 +253,19 @@ void generateCatto()
 
   // Tail
   glPushMatrix();
-    glTranslatef(-0.7, 2.1, 0);
+    glTranslatef(-0.7, 2.2, 0);
     glRotatef(0, 0, 0, 1);
     clipTailBody();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(-1.5, 2.1, 0);
+    glTranslatef(-1.5, 2.2, 0);
     glRotatef(180, 0, 0, 1);
     clipTailBody();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(-1.5, 2.5, 0);
+    glTranslatef(-1.5, 2.6, 0);
     clipTailBall();
   glPopMatrix();
 
@@ -282,3 +277,11 @@ void generateCatto()
 
 }
 
+void generateMovingCatto() {
+
+  glPushMatrix();
+    glTranslatef(0, jump_param, 0);
+    generateCatto();
+  glPopMatrix();
+
+}

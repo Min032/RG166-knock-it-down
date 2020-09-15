@@ -6,10 +6,13 @@
 
 void initLights();
 void initMaterial();
+void initParams();
 
 void onDisplay(void);
 void onKeyboard(unsigned char key, int x, int y);
 void onKeyboardSpecial(int key, int x, int y); 
 void onReshape(int width, int height);
+void on_timer0(int id);
+
 
 #endif
