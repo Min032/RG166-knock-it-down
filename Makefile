@@ -25,4 +25,4 @@ main.o : main.cpp
 .PHONY : clean
 
 clean: 
-	-rm *.o
+	-rm *.o $(PROGRAM)

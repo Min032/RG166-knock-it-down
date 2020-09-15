@@ -10,9 +10,9 @@
 #define INITIAL_FRONT_ANGLE 5
 #define INITIAL_BACK_ANGLE 0
 
-float cam_param_y = 12;
-float cam_param_x = 5;
-float cam_param_z = 10;
+float cam_param_y = 4;
+float cam_param_x = 6;
+float cam_param_z = 5;
 float cam_increment = 0.2;
 
 int game_ongoing = 0;
@@ -75,6 +75,9 @@ void initParams() {
   back_legs_angle_increment = 5;
   time_passed = 0;
   game_ongoing = 0;
+  cam_param_y = 0;
+  cam_param_x = 0;
+  cam_param_z = 0;
 }
 
 void on_timer0(int id) {
@@ -212,12 +215,13 @@ void onDisplay(void)
   glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-  gluLookAt(cam_param_x, cam_param_y, 0+cam_param_z, 0, 0, 0, 0, 1, 0);
+  gluLookAt(cam_param_x, cam_param_y, cam_param_z, 0, 0, 0, 0, 1, 0);
   
   glEnable(GL_LIGHT1);  
 
   draw_axis(50);
     
+  
   generatePlatform();
 
   glDisable(GL_LIGHT1);

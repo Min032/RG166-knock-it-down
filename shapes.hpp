@@ -17,6 +17,7 @@ void draw_axis(int n);
 void makeLegAndPaw();
 void clipTailBody();
 void clipTailBall();
+void clipSmile();
 
 void generatePlatform();
 void generateCatto();

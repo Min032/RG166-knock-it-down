@@ -156,6 +156,18 @@ void clipTailBall()
   
 }
 
+void clipSmile() {
+
+  double clip_plane0[] = {0, -1, 0, 0};
+  glClipPlane(GL_CLIP_PLANE0, clip_plane0);
+  
+  glEnable(GL_CLIP_PLANE0);
+  
+  glutSolidTorus(0.01, 0.05, 50, 50);
+  glDisable(GL_CLIP_PLANE0);
+
+}
+
 void makeLegAndPaw() {
 
   // Leg
@@ -233,7 +245,7 @@ void generateCatto()
 
   // Ears
   glPushMatrix();
-    glTranslatef(0.85, 2.3, -0.15);
+    glTranslatef(0.8, 2.3, -0.15);
     glRotatef(-30, 1, 0, 0);
     glScalef(0.3, 1.3, 1);
     glRotatef(90, 0, 0, 1);
@@ -242,7 +254,7 @@ void generateCatto()
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(0.85, 2.3, 0.15);
+    glTranslatef(0.8, 2.3, 0.15);
     glRotatef(30, 1, 0, 0);
     glScalef(0.3, 1.3, 1);
     glRotatef(90, 0, 0, 1);
@@ -274,6 +286,55 @@ void generateCatto()
   // Disable texture coordinates
   glDisable(GL_TEXTURE_GEN_S); 
   glDisable(GL_TEXTURE_GEN_T);
+
+  // Smile
+  setMaterialColor(0, 0, 0);
+
+  glPushMatrix();
+    glTranslatef(1.03, 1.9, 0.05);
+    glRotatef(70, 0, 1, 0);
+    clipSmile();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(1.03, 1.9, -0.05);
+    glRotatef(110, 0, 1, 0);
+    clipSmile();
+  glPopMatrix();
+
+  // Eyes
+
+  glPushMatrix();
+    glTranslatef(0.99, 2.2, -0.08);
+    glRotatef(30, 0, 0, 1);
+    glRotatef(100, 0, 1, 0);
+    glScalef(1.3, 1, 1);
+    clipSmile();
+  glPopMatrix();
+  
+  glPushMatrix();
+    glTranslatef(0.99, 2.2, 0.08);
+    glRotatef(30, 0, 0, 1);
+    glRotatef(80, 0, 1, 0);
+    glScalef(1.3, 1, 1);
+    clipSmile();
+  glPopMatrix();
+
+
+  // Eyeballs
+
+  glPushMatrix();
+    glTranslatef(1.025, 2.115, 0.095);
+    glScalef(0.01, 0.035, 0.01);
+    glutSolidSphere(1, 50, 50);
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(1.025, 2.115, -0.095);
+    glScalef(0.01, 0.035, 0.01);
+    glutSolidSphere(1, 50, 50);
+  glPopMatrix();
+
 
 }
 
