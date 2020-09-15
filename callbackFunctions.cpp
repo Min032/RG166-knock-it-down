@@ -17,14 +17,14 @@ float cam_increment = 0.2;
 
 int game_ongoing = 0;
 
-double front_legs_angle_param = 0;
+double front_legs_angle_param = -15;
 double back_legs_angle_param = 0;
 
-double front_legs_angle_increment = 5;
-double back_legs_angle_increment = 5;
+double front_legs_angle_increment = 8;
+double back_legs_angle_increment = 8;
 
 double jump_param = 0;
-double jump_param_increment = 0.08;
+double jump_param_increment = 0.11;
 
 double time_passed = 0;
 
@@ -69,15 +69,12 @@ void initMaterial()
 }
 
 void initParams() {
-  front_legs_angle_param = 0;
-  front_legs_angle_increment = 5;
+  front_legs_angle_param = -15;
   back_legs_angle_param = 0;
-  back_legs_angle_increment = 5;
+  front_legs_angle_increment = 8;
+  back_legs_angle_increment = 8;
   time_passed = 0;
   game_ongoing = 0;
-  cam_param_y = 0;
-  cam_param_x = 0;
-  cam_param_z = 0;
 }
 
 void on_timer0(int id) {
@@ -86,26 +83,26 @@ void on_timer0(int id) {
     // TODO: check if game should stop
 
     if(front_legs_angle_param >= 18)
-      front_legs_angle_increment = -5;
+      front_legs_angle_increment = -8;
     
-    if(front_legs_angle_param <= -40)
-      front_legs_angle_increment = 5;
+    if(front_legs_angle_param <= -60)
+      front_legs_angle_increment = 8;
     
     front_legs_angle_param += front_legs_angle_increment;
 
     if(back_legs_angle_param >= 18)
-      back_legs_angle_increment = -5;
+      back_legs_angle_increment = -8;
     
-    if(back_legs_angle_param <= -40)
-      back_legs_angle_increment = 5;
+    if(back_legs_angle_param <= -60)
+      back_legs_angle_increment = 8;
 
     back_legs_angle_param += front_legs_angle_increment;
     
     if(jump_param >= 1)
-      jump_param_increment = -0.1;
+      jump_param_increment = -0.11;
 
     if(jump_param <= 0)
-      jump_param_increment = 0.1;
+      jump_param_increment = 0.11;
 
     jump_param += jump_param_increment;
 
