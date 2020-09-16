@@ -10,6 +10,8 @@
 #define TIMER1_ID 1
 #define TIMER1_INTERVAL 25
 
+#define DEBUG_MODE 0
+
 #define INITIAL_FRONT_ANGLE 5
 #define INITIAL_BACK_ANGLE 0
 
@@ -30,6 +32,9 @@ double back_legs_angle_increment = 8;
 
 double jump_param = 0;
 double jump_param_increment = 0.11;
+double floor_param = 0.01;
+
+double character_z_param = 0;
 
 double time_passed = 0;
 
@@ -95,6 +100,7 @@ void on_timer0(int id) {
 
     // TODO: check if game should stop
 
+    // Parameters for front legs (running animation)
     if(front_legs_angle_param >= 18)
       front_legs_angle_increment = -8;
     
@@ -103,6 +109,7 @@ void on_timer0(int id) {
     
     front_legs_angle_param += front_legs_angle_increment;
 
+    // Parameters for back legs (running animation)
     if(back_legs_angle_param >= 18)
       back_legs_angle_increment = -8;
     
@@ -111,6 +118,7 @@ void on_timer0(int id) {
 
     back_legs_angle_param += front_legs_angle_increment;
     
+    // Parameters for jumping (running animation)
     if(jump_param >= 1)
       jump_param_increment = -0.11;
 
@@ -118,6 +126,12 @@ void on_timer0(int id) {
       jump_param_increment = 0.11;
 
     jump_param += jump_param_increment;
+
+    // Parameter for moving floor
+    if(floor_param >= 100)
+      floor_param = 0.1;
+
+    floor_param += 0.1;
 
     glutPostRedisplay();
 
@@ -129,6 +143,7 @@ void on_timer0(int id) {
 void on_timer1(int id) {
   if (id != TIMER1_ID) return;
 
+  // Menu rotation animation parameter
   if(rotation_y_menu_param >= 360)
     rotation_y_menu_param = 0;
 
@@ -219,6 +234,18 @@ void onKeyboard(unsigned char key, int x, int y)
       initParams();
       glutPostRedisplay();
       break;
+    case 'a':
+    case 'A':
+      if(game_ongoing && character_z_param >= -4)
+        character_z_param -= 0.1;
+      glutPostRedisplay();
+      break;
+    case 'd':
+    case 'D':
+      if(game_ongoing && character_z_param <= 4)
+        character_z_param += 0.1;
+      glutPostRedisplay();
+      break;
   }
 }
 
@@ -244,12 +271,14 @@ void onDisplay(void)
   glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-  if(!game_ongoing)
-  {
-    gluLookAt(6, 5, 5, 0, 0, 0, 0, 1, 0);
-  }
-  else 
-    gluLookAt(-9, 6, 0, 0, 0, 0, 0, 1, 0);
+
+  if(!DEBUG_MODE) 
+    if(!game_ongoing)
+      gluLookAt(6, 5, 5, 0, 0, 0, 0, 1, 0);
+    else 
+      gluLookAt(-7, 6, 0, 0, 3, 0, 0, 1, 0);
+  else
+    gluLookAt(cam_param_x, cam_param_y, cam_param_z, 0, 0, 0, 0, 1, 0);
 
   glEnable(GL_LIGHT1);
 
@@ -266,11 +295,15 @@ void onDisplay(void)
   glPushMatrix();
   if(!game_ongoing)
     glRotatef(rotation_y_menu_param, 0, 1, 0);
-  generatePlatform();
+  generateWholePlatform();
 
+  
   glDisable(GL_LIGHT1);
   glEnable(GL_LIGHT0);
+  
+  
   generateMovingCatto();
+  
   glDisable(GL_LIGHT0);
   glEnable(GL_LIGHT1);
 
@@ -283,6 +316,7 @@ void onDisplay(void)
       generateMenu();
     }
   glPopMatrix();
+
 
   glutSwapBuffers();
 }

@@ -11,6 +11,8 @@ static GLuint names[2];
 #define FILENAME0 "resources/orr.bmp"
 #define FILENAME1 "resources/floor.bmp"
 
+static float matrix[16];
+
 void initTextures()
 {
   Image *image;
@@ -62,6 +64,10 @@ void initTextures()
   // Destroy the image object
   image_done(image);
 
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
+
 }
 
 void draw_axis(int n)
@@ -93,24 +99,14 @@ void draw_axis(int n)
   glPopMatrix();
 }
 
-void drawTriPolygon(float v1x, float v1y, float v1z, 
-                    float v2x, float v2y, float v2z,
-                    float v3x, float v3y, float v3z) 
-{
-  glBegin(GL_TRIANGLE_STRIP);
-    glVertex3f(v1x, v1y, v1z);
-    glVertex3f(v2x, v2y, v2z);
-    glVertex3f(v3x, v3y, v3z);
-  glEnd();
-
-}
-
 void generateMenu() {
 
   drawHelveticaString("Welcome to Knock it down!", 3.7, 4.3, 3.7);
-  drawHelveticaString("[Spacebar] for start", 4, 3.9, 4);
+  drawHelveticaString("[A/S] for movement", 4, 4.1, 4);
+  drawHelveticaString("[SPACE] for start", 4, 3.9, 4);
   drawHelveticaString("[P] for pause", 4, 3.7, 4);
-  drawHelveticaString("[Esc] for exit", 4, 3.5, 4);
+  drawHelveticaString("[R] for reset", 4, 3.5, 4);
+  drawHelveticaString("[ESC] for exit", 4, 3.3, 4);
 
   glEnable(GL_BLEND);
   
@@ -128,28 +124,126 @@ void generateMenu() {
     
 }
 
-void generatePlatform()
+void drawMainPolygon() {
+
+  glBegin(GL_QUADS);
+    glNormal3f(0, 1, 0);
+
+    glTexCoord2f(-4, 8);
+    glVertex3f(-2, 4, 0);
+
+    glTexCoord2f(6000, 8);
+    glVertex3f(3000, 4, 0);
+
+    glTexCoord2f(6000, -8);
+    glVertex3f(3000, -4, 0);
+
+    glTexCoord2f(-4, -8);
+    glVertex3f(-2, -4, 0);
+  glEnd();
+
+}
+
+void drawSidePolygon() {
+
+  glBegin(GL_QUADS);
+    glNormal3f(0, 0, 1);
+
+    glTexCoord2f(-4, 0.6);
+    glVertex3f(-2, 0.3, 0);
+
+    glTexCoord2f(6000, 0.6);
+    glVertex3f(3000, 0.3, 0);
+
+    glTexCoord2f(6000, -0.6);
+    glVertex3f(3000, -0.3, 0);
+
+    glTexCoord2f(-4, -0.6);
+    glVertex3f(-2, -0.3, 0);
+  glEnd();
+
+}
+
+void drawBottomPolygon() {
+
+  glBegin(GL_QUADS);
+    glNormal3f(1, 0, 0);
+
+    glTexCoord2f(-8, 0.6);
+    glVertex3f(-4, 0.3, 0);
+
+    glTexCoord2f(8, 0.6);
+    glVertex3f(4, 0.3, 0);
+
+    glTexCoord2f(8, -0.6);
+    glVertex3f(4, -0.3, 0);
+
+    glTexCoord2f(-8, -0.6);
+    glVertex3f(-4, -0.3, 0);
+  glEnd();
+
+}
+
+void generateTexturedPlatform()
 {
   
   setMaterialColor(0.2, 0.2, 0.2, 1);
-
-  // Enable texture coordinates generation
-  glEnable(GL_TEXTURE_GEN_S); 
-  glEnable(GL_TEXTURE_GEN_T);
-
-  // Set floor texture
+  
   glBindTexture(GL_TEXTURE_2D, names[1]);
+  
+  // Main plats
+  glPushMatrix();
+    
+    glTranslatef(0, 0.3, 0);
+    glRotatef(90, 1, 0, 0);
+    drawMainPolygon();  
+  glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(240, 0, 0);
-    glScalef(500, 0.6, 8);
-    glutSolidCube(1);
+    
+    glTranslatef(0, -0.3, 0);
+    glRotatef(270, 1, 0, 0);
+    drawMainPolygon();  
+  glPopMatrix();
+
+  // Sides
+  glPushMatrix();
+    glTranslatef(0, 0, 4);
+    drawSidePolygon();  
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(0, 0, -4);
+    glRotatef(180, 1, 0, 0);
+    drawSidePolygon();  
   glPopMatrix();
 
   glBindTexture(GL_TEXTURE_2D, 0);
-  // Disable texture coordinates
-  glDisable(GL_TEXTURE_GEN_S); 
-  glDisable(GL_TEXTURE_GEN_T);
+
+}
+
+void generateWholePlatform() {
+
+  setMaterialColor(0, 0, 0, 0);
+  double clip_plane0[] = {1, 0, 0, 3};
+  glClipPlane(GL_CLIP_PLANE0, clip_plane0);
+
+  glEnable(GL_CLIP_PLANE0);
+
+  glPushMatrix();
+    glTranslatef(-2-floor_param, 0, 0);
+    generateTexturedPlatform();
+  glPopMatrix();
+
+  glDisable(GL_CLIP_PLANE0);
+
+  glPushMatrix();
+    glTranslatef(-3.5, 0, 0);
+    glScalef(1, 1, 8);
+    glutSolidCube(1);
+
+  glPopMatrix();
+
 }
 
 void clipTailBody()
@@ -364,7 +458,7 @@ void generateCatto()
 void generateMovingCatto() {
 
   glPushMatrix();
-    glTranslatef(0, jump_param, 0);
+    glTranslatef(0, jump_param, character_z_param);
     generateCatto();
   glPopMatrix();
 
