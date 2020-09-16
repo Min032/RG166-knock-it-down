@@ -9,6 +9,7 @@ extern double back_legs_angle_param;
 extern double jump_param;
 extern double floor_param;
 extern double character_z_param;
+extern double objects_rotation_param;
 
 void draw_axis(int n);
 
@@ -27,6 +28,7 @@ void generateTexturedPlatform();
 void generateWholePlatform();
 void generateCatto();
 void generateMovingCatto();
+void generateObjects();
 
 void initTextures();
 

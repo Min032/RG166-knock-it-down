@@ -3,6 +3,7 @@
 #include "image.hpp"
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 // Texture IDs
 static GLuint names[2];
@@ -11,7 +12,7 @@ static GLuint names[2];
 #define FILENAME0 "resources/orr.bmp"
 #define FILENAME1 "resources/floor.bmp"
 
-static float matrix[16];
+std::vector<double> objects_z;
 
 void initTextures()
 {
@@ -64,10 +65,11 @@ void initTextures()
   // Destroy the image object
   image_done(image);
 
+  /*
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glGetFloatv(GL_MODELVIEW_MATRIX, matrix);
-
+  */
 }
 
 void draw_axis(int n)
@@ -461,5 +463,131 @@ void generateMovingCatto() {
     glTranslatef(0, jump_param, character_z_param);
     generateCatto();
   glPopMatrix();
+
+}
+
+void generateObjects() {
+
+  if(floor_param == 0)
+    objects_z = generateRangedNumbers(-4, 4);
+
+  for(int i = 0; i < 15; i++) {
+    std::cout << objects_z[i] << std::endl;
+  }
+
+  double clip_plane0[] = {1, 0, 0, 3};
+  double clip_plane1[] = {0, 1, 0, -1};
+  glClipPlane(GL_CLIP_PLANE0, clip_plane0);
+
+  setMaterialColor(0.7, 0.3, 0.3, 1);
+  glEnable(GL_CLIP_PLANE0);
+  
+  glPushMatrix();
+    glTranslatef(30-floor_param, 1, objects_z[0]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(40-floor_param, 1, objects_z[1]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(50-floor_param, 1, objects_z[2]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(60-floor_param, 1, objects_z[3]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(70-floor_param, 1, objects_z[4]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(80-floor_param, 1, objects_z[5]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(90-floor_param, 1, objects_z[6]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(100-floor_param, 1, objects_z[7]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(110-floor_param, 1, objects_z[8]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(120-floor_param, 1, objects_z[9]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(130-floor_param, 1, objects_z[10]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(140-floor_param, 1, objects_z[11]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(150-floor_param, 1, objects_z[12]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(160-floor_param, 1, objects_z[13]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+  glPushMatrix();
+    glTranslatef(170-floor_param, 1, objects_z[14]);
+    glRotatef(objects_rotation_param, 0, 1, 0);
+    glScalef(0.3, 0.3, 0.3);
+    glutWireDodecahedron();
+  glPopMatrix();
+
+
+  glDisable(GL_CLIP_PLANE0);
 
 }

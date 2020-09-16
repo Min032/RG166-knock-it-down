@@ -32,9 +32,10 @@ double back_legs_angle_increment = 8;
 
 double jump_param = 0;
 double jump_param_increment = 0.11;
-double floor_param = 0.01;
+double floor_param = 0;
 
 double character_z_param = 0;
+double objects_rotation_param = 0;
 
 double time_passed = 0;
 
@@ -128,10 +129,15 @@ void on_timer0(int id) {
     jump_param += jump_param_increment;
 
     // Parameter for moving floor
-    if(floor_param >= 100)
-      floor_param = 0.1;
+    if(floor_param >= 171)
+      floor_param = 0;
 
-    floor_param += 0.1;
+    floor_param += 0.2;
+
+    if(objects_rotation_param >= 360)
+      objects_rotation_param = 0;
+
+    objects_rotation_param += 3;
 
     glutPostRedisplay();
 
@@ -236,13 +242,13 @@ void onKeyboard(unsigned char key, int x, int y)
       break;
     case 'a':
     case 'A':
-      if(game_ongoing && character_z_param >= -4)
+      if(game_ongoing && character_z_param >= -3.5)
         character_z_param -= 0.1;
       glutPostRedisplay();
       break;
     case 'd':
     case 'D':
-      if(game_ongoing && character_z_param <= 4)
+      if(game_ongoing && character_z_param <= 3.5)
         character_z_param += 0.1;
       glutPostRedisplay();
       break;
@@ -297,11 +303,11 @@ void onDisplay(void)
     glRotatef(rotation_y_menu_param, 0, 1, 0);
   generateWholePlatform();
 
+  generateObjects();
   
   glDisable(GL_LIGHT1);
   glEnable(GL_LIGHT0);
-  
-  
+
   generateMovingCatto();
   
   glDisable(GL_LIGHT0);

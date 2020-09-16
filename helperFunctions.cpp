@@ -1,5 +1,7 @@
 #include "helperFunctions.hpp"
 #include <iostream>
+#include <random>
+#include <cmath>
 
 void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha)
 {
@@ -24,4 +26,23 @@ void drawHelveticaString(char *str, double x, double y, double z) {
   glPopMatrix();
   glEnable(GL_LIGHTING);
   
+}
+
+std::vector<double> generateRangedNumbers(double min, double max) {
+
+  std::vector<double> result;
+
+  std::uniform_real_distribution<double> unif(min, max);
+  std::default_random_engine re;
+  double a_random_double = unif(re);
+
+  for(int i = 0; i < 15; i++) {
+  
+    double a_random_double = unif(re);
+    result.push_back(a_random_double);
+
+  }
+
+  std::cout << "Called" << std::endl;
+  return result;
 }
