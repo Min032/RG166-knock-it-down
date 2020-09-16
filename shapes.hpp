@@ -15,17 +15,21 @@ extern int game_ongoing;
 extern int current_level;
 extern int game_finished;
 
+// Axis of n length
 void drawAxis(int n);
 
+// Parts of cat
 void makeLegAndPaw();
 void clipTailBody();
 void clipTailBall();
 void clipSmile();
 
+// Parts of floor
 void drawBottomPolygon();
 void drawSidePolygon();
 void drawMainPolygon();
 
+// Misc stuff
 void generateMenu();
 void generateScore();
 void generateLevelResolve();
