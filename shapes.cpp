@@ -4,6 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
+#include <string.h>
 
 // Texture IDs
 static GLuint names[2];
@@ -13,6 +14,7 @@ static GLuint names[2];
 #define FILENAME1 "resources/floor.bmp"
 
 std::vector<double> objects_z;
+std::vector<bool> already_collided_before(0);
 
 void initTextures()
 {
@@ -72,7 +74,7 @@ void initTextures()
   */
 }
 
-void draw_axis(int n)
+void drawAxis(int n)
 {
   glPushMatrix();
     glDisable(GL_LIGHTING);  
@@ -103,12 +105,12 @@ void draw_axis(int n)
 
 void generateMenu() {
 
-  drawHelveticaString("Welcome to Knock it down!", 3.7, 4.3, 3.7);
-  drawHelveticaString("[A/S] for movement", 4, 4.1, 4);
-  drawHelveticaString("[SPACE] for start", 4, 3.9, 4);
-  drawHelveticaString("[P] for pause", 4, 3.7, 4);
-  drawHelveticaString("[R] for reset", 4, 3.5, 4);
-  drawHelveticaString("[ESC] for exit", 4, 3.3, 4);
+  drawRomanString("Welcome to Knock it down!", 3.7, 4.3, 3.7);
+  drawRomanString("[A/S] for movement", 4, 4.1, 4);
+  drawRomanString("[SPACE] for start", 4, 3.9, 4);
+  drawRomanString("[P] for pause", 4, 3.7, 4);
+  drawRomanString("[R] for reset", 4, 3.5, 4);
+  drawRomanString("[ESC] for exit", 4, 3.3, 4);
 
   glEnable(GL_BLEND);
   
@@ -124,6 +126,31 @@ void generateMenu() {
   glPopMatrix();
   glDisable(GL_BLEND);
     
+}
+
+void generateScore() {
+  std::string score_string;
+
+  score_string = "Score: ";
+  score_string.append(std::to_string(score));
+
+  char *tmp = (char *)score_string.c_str();
+
+  if(!game_ongoing)
+    drawRomanString(tmp, 0, 3.6, -7);
+  else
+    drawRomanString(tmp, 0, 6.35, 3.05);
+}
+
+void generateLevelResolve() {
+  std::string level_string;
+
+  level_string = "Current level: ";
+  level_string.append(std::to_string(current_level));
+
+  char *tmp = (char *)level_string.c_str();
+
+  drawRomanString(tmp, 0, 6.35, -3.2);
 }
 
 void drawMainPolygon() {
@@ -466,14 +493,22 @@ void generateMovingCatto() {
 
 }
 
+void initGlobalIndicator() {
+  already_collided_before.resize(0);
+  already_collided_before.resize(15);
+  std::fill(std::begin(already_collided_before), std::end(already_collided_before), false);
+}
+
 void generateObjects() {
 
-  if(floor_param == 0)
+  if(floor_param >= 232 || floor_param == 0) {
+    initGlobalIndicator();
     objects_z = generateRangedNumbers(-4, 4);
-
-  for(int i = 0; i < 15; i++) {
-    std::cout << objects_z[i] << std::endl;
   }
+  
+  generateLevelResolve();
+
+  bool collided = false;
 
   double clip_plane0[] = {1, 0, 0, 3};
   double clip_plane1[] = {0, 1, 0, -1};
@@ -483,20 +518,32 @@ void generateObjects() {
   glEnable(GL_CLIP_PLANE0);
   
   glPushMatrix();
-    glTranslatef(30-floor_param, 1, objects_z[0]);
+    if(!already_collided_before[0] && isCollision(character_z_param, 20 - floor_param, objects_z[0])) {
+      already_collided_before[0] = true;
+      score++;
+    }
+    glTranslatef(20-floor_param, 1, objects_z[0]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(40-floor_param, 1, objects_z[1]);
+    if(!already_collided_before[1] && isCollision(character_z_param, 35 - floor_param, objects_z[1])) {
+      already_collided_before[1] = true;
+      score++;
+    }
+    glTranslatef(35-floor_param, 1, objects_z[1]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
+    if(!already_collided_before[2] && isCollision(character_z_param, 50 - floor_param, objects_z[2])) {
+      already_collided_before[2] = true;
+      score++;
+    }
     glTranslatef(50-floor_param, 1, objects_z[2]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
@@ -504,84 +551,132 @@ void generateObjects() {
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(60-floor_param, 1, objects_z[3]);
+    if(!already_collided_before[3] && isCollision(character_z_param, 65 - floor_param, objects_z[3])) {
+      already_collided_before[3] = true;
+      score++;
+    }
+    glTranslatef(65-floor_param, 1, objects_z[3]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(70-floor_param, 1, objects_z[4]);
+    if(!already_collided_before[4] && isCollision(character_z_param, 80 - floor_param, objects_z[4])) {
+      already_collided_before[4] = true;
+      score++;
+    }
+    glTranslatef(80-floor_param, 1, objects_z[4]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(80-floor_param, 1, objects_z[5]);
+    if(!already_collided_before[5] && isCollision(character_z_param, 95 - floor_param, objects_z[5])) {
+      already_collided_before[5] = true;
+      score++;
+    }
+    glTranslatef(95-floor_param, 1, objects_z[5]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(90-floor_param, 1, objects_z[6]);
+    if(!already_collided_before[6] && isCollision(character_z_param, 110 - floor_param, objects_z[6])) {
+      already_collided_before[6] = true;
+      score++;
+    }
+    glTranslatef(110-floor_param, 1, objects_z[6]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(100-floor_param, 1, objects_z[7]);
+    if(!already_collided_before[7] && isCollision(character_z_param, 125 - floor_param, objects_z[7])) {
+      already_collided_before[7] = true;
+      score++;
+    }
+    glTranslatef(125-floor_param, 1, objects_z[7]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(110-floor_param, 1, objects_z[8]);
+    if(!already_collided_before[8] && isCollision(character_z_param, 140 - floor_param, objects_z[8])) {
+      already_collided_before[8] = true;
+      score++;
+    }
+    glTranslatef(140-floor_param, 1, objects_z[8]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(120-floor_param, 1, objects_z[9]);
+    if(!already_collided_before[9] && isCollision(character_z_param, 155 - floor_param, objects_z[9])) {
+      already_collided_before[9] = true;
+      score++;
+    }
+    glTranslatef(155-floor_param, 1, objects_z[9]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(130-floor_param, 1, objects_z[10]);
+    if(!already_collided_before[10] && isCollision(character_z_param, 170 - floor_param, objects_z[10])) {
+      already_collided_before[10] = true;
+      score++;
+    }
+    glTranslatef(170-floor_param, 1, objects_z[10]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(140-floor_param, 1, objects_z[11]);
+    if(!already_collided_before[11] && isCollision(character_z_param, 185 - floor_param, objects_z[11])) {
+      already_collided_before[11] = true;
+      score++;
+    }
+    glTranslatef(185-floor_param, 1, objects_z[11]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(150-floor_param, 1, objects_z[12]);
+    if(!already_collided_before[12] && isCollision(character_z_param, 200 - floor_param, objects_z[12])) {
+      already_collided_before[12] = true;
+      score++;
+    }
+    glTranslatef(200-floor_param, 1, objects_z[12]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(160-floor_param, 1, objects_z[13]);
+    if(!already_collided_before[13] && isCollision(character_z_param, 215 - floor_param, objects_z[13])) {
+      already_collided_before[13] = true;
+      score++;
+    }
+    glTranslatef(215-floor_param, 1, objects_z[13]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();
   glPopMatrix();
 
   glPushMatrix();
-    glTranslatef(170-floor_param, 1, objects_z[14]);
+    if(!already_collided_before[14] && isCollision(character_z_param, 230 - floor_param, objects_z[14])) {
+      already_collided_before[14] = true;
+      score++;
+    }
+    glTranslatef(230-floor_param, 1, objects_z[14]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
     glutWireDodecahedron();

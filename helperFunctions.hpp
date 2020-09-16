@@ -9,7 +9,9 @@
 
 
 void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
-void drawHelveticaString(char *str, double x, double y, double z);
+void drawRomanString(char *str, double x, double y, double z);
 std::vector<double> generateRangedNumbers(double min, double max);
+
+bool isCollision(double catZ, double objX, double objZ);
 
 #endif

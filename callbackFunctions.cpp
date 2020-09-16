@@ -33,13 +33,14 @@ double back_legs_angle_increment = 8;
 double jump_param = 0;
 double jump_param_increment = 0.11;
 double floor_param = 0;
+double floor_increment = 0.2;
 
 double character_z_param = 0;
 double objects_rotation_param = 0;
 
-double time_passed = 0;
+int current_level = 1;
 
-double score = 0;
+int score = 0;
 
 void initLights()
 {
@@ -90,9 +91,13 @@ void initParams() {
   jump_param = 0;
   jump_param_increment = 0.11;
 
+  floor_param = 0;
+  character_z_param = 0;
+  objects_rotation_param = 0;
+  current_level = 1;
+
   score = 0;
 
-  time_passed = 0;
   game_ongoing = 0;
 }
 
@@ -129,10 +134,13 @@ void on_timer0(int id) {
     jump_param += jump_param_increment;
 
     // Parameter for moving floor
-    if(floor_param >= 171)
+    if(floor_param >= 235) {
       floor_param = 0;
+      floor_increment += 0.02;
+      current_level++;
+    }
 
-    floor_param += 0.2;
+    floor_param += floor_increment;
 
     if(objects_rotation_param >= 360)
       objects_rotation_param = 0;
@@ -289,7 +297,7 @@ void onDisplay(void)
   glEnable(GL_LIGHT1);
 
   glPushMatrix();
-  draw_axis(50);
+    //drawAxis(50);
   glPopMatrix();
 
 
@@ -303,7 +311,8 @@ void onDisplay(void)
     glRotatef(rotation_y_menu_param, 0, 1, 0);
   generateWholePlatform();
 
-  generateObjects();
+  if(game_ongoing)
+    generateObjects();
   
   glDisable(GL_LIGHT1);
   glEnable(GL_LIGHT0);
@@ -315,7 +324,7 @@ void onDisplay(void)
 
   glPopMatrix();
 
-  
+  generateScore();
 
   glPushMatrix();
     if(!game_ongoing) {
