@@ -106,8 +106,6 @@ void initParams() {
 void on_timer0(int id) {
   if (id != TIMER0_ID) return;
 
-    // TODO: check if game should stop
-
     // Parameters for front legs (running animation)
     if(front_legs_angle_param >= 18)
       front_legs_angle_increment = -8;

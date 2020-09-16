@@ -47,7 +47,6 @@ double generateRNZO() {
 bool isCollision(double catZ, double objX, double objZ) {
 
   if(abs(catZ -objZ) <= 0.5 && abs(3 - objX) <= 0.5) {
-    std::cout << "Collision detected!" << std::endl;
     return true;
   }
   else { 
