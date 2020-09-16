@@ -6,9 +6,7 @@
 void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha)
 {
   GLfloat diffuse_coeffs[] = { r, g, b, alpha };
-  //GLfloat ambient_coeffs[] = { r, g, b, 1 };
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse_coeffs);
-  //glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient_coeffs);
 } 
 
 void drawRomanString(char *str, double x, double y, double z) {
@@ -42,9 +40,13 @@ std::vector<double> generateRangedNumbers(double min, double max) {
   return result;
 }
 
+double generateRNZO() {
+  return ((double)rand()/(double)RAND_MAX);
+}
+
 bool isCollision(double catZ, double objX, double objZ) {
 
-  if(abs(catZ -objZ) <= 0.5 && abs(0 - objX) <= 0.5) {
+  if(abs(catZ -objZ) <= 0.5 && abs(3 - objX) <= 0.5) {
     std::cout << "Collision detected!" << std::endl;
     return true;
   }

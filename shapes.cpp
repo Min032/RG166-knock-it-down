@@ -13,8 +13,10 @@ static GLuint names[2];
 #define FILENAME0 "resources/orr.bmp"
 #define FILENAME1 "resources/floor.bmp"
 
-std::vector<double> objects_z;
+std::vector<double> objects_z(0);
 std::vector<bool> already_collided_before(0);
+std::vector<double> throw_params_z(0);
+std::vector<double> throw_params_y(0);
 
 void initTextures()
 {
@@ -105,23 +107,23 @@ void drawAxis(int n)
 
 void generateMenu() {
 
-  drawRomanString("Welcome to Knock it down!", 3.7, 4.3, 3.7);
-  drawRomanString("[A/S] for movement", 4, 4.1, 4);
-  drawRomanString("[SPACE] for start", 4, 3.9, 4);
-  drawRomanString("[P] for pause", 4, 3.7, 4);
-  drawRomanString("[R] for reset", 4, 3.5, 4);
-  drawRomanString("[ESC] for exit", 4, 3.3, 4);
+  drawRomanString("Welcome to Knock it down!", 4.1, 7, 5.2);
+  drawRomanString("[A/S] for movement", 4.1, 6.5, 5);
+  drawRomanString("[SPACE] for start", 4.1, 6, 5);
+  drawRomanString("[P] for pause", 4.1, 5.5, 5);
+  drawRomanString("[R] for reset", 4.1, 5, 5);
+  drawRomanString("[ESC] for exit", 4.1, 4.4, 5);
 
   glEnable(GL_BLEND);
   
-  setMaterialColor(0.1, 0.1, 0.1, 0.8);
+  setMaterialColor(0.2, 0.3, 0.2, 0.8);
   glPushMatrix();
-    glTranslatef(0, 3.5, 0);
-    glTranslatef(2.5, 0, 0);
-    glTranslatef(0, 0, 2);
+    glTranslatef(0, 4, 0);
+    glTranslatef(4, 0, 0);
+    glTranslatef(0, 0, 4);
     glRotatef(-40, 0, 1, 0);
     glRotatef(50, 0, 0, 1);
-    glScalef(0.2, 7, 15);
+    glScalef(0.2, 40, 40);
     glutSolidCube(1);
   glPopMatrix();
   glDisable(GL_BLEND);
@@ -137,9 +139,9 @@ void generateScore() {
   char *tmp = (char *)score_string.c_str();
 
   if(!game_ongoing)
-    drawRomanString(tmp, 0, 3.6, -7);
+    drawRomanString(tmp, 4.1, 7.4, -3.85);
   else
-    drawRomanString(tmp, 0, 6.35, 3.05);
+    drawRomanString(tmp, 3, 6.35, 3.05);
 }
 
 void generateLevelResolve() {
@@ -150,7 +152,37 @@ void generateLevelResolve() {
 
   char *tmp = (char *)level_string.c_str();
 
-  drawRomanString(tmp, 0, 6.35, -3.2);
+  drawRomanString(tmp, 3, 6.35, -3.2);
+}
+
+void generateFinisher() {
+
+  std::string score_string;
+
+  score_string = "Score: ";
+  score_string.append(std::to_string(score));
+
+  char *tmp = (char *)score_string.c_str();
+
+  drawRomanString("You have finished!", 4.1, 7, 5.2);
+  drawRomanString(tmp, 4.1, 6.5, 5);
+  
+  drawRomanString("[R] for reset", 4.1, 5, 5);
+  drawRomanString("[ESC] for exit", 4.1, 4.4, 5);
+
+  glEnable(GL_BLEND);
+  
+  setMaterialColor(0.2, 0.3, 0.5, 0.8);
+  glPushMatrix();
+    glTranslatef(0, 4, 0);
+    glTranslatef(4, 0, 0);
+    glTranslatef(0, 0, 4);
+    glRotatef(-40, 0, 1, 0);
+    glRotatef(50, 0, 0, 1);
+    glScalef(0.2, 40, 40);
+    glutSolidCube(1);
+  glPopMatrix();
+  glDisable(GL_BLEND);
 }
 
 void drawMainPolygon() {
@@ -254,7 +286,7 @@ void generateTexturedPlatform()
 void generateWholePlatform() {
 
   setMaterialColor(0, 0, 0, 0);
-  double clip_plane0[] = {1, 0, 0, 3};
+  double clip_plane0[] = {1, 0, 0, 4};
   glClipPlane(GL_CLIP_PLANE0, clip_plane0);
 
   glEnable(GL_CLIP_PLANE0);
@@ -267,7 +299,7 @@ void generateWholePlatform() {
   glDisable(GL_CLIP_PLANE0);
 
   glPushMatrix();
-    glTranslatef(-3.5, 0, 0);
+    glTranslatef(-4.5, 0, 0);
     glScalef(1, 1, 8);
     glutSolidCube(1);
 
@@ -487,7 +519,7 @@ void generateCatto()
 void generateMovingCatto() {
 
   glPushMatrix();
-    glTranslatef(0, jump_param, character_z_param);
+    glTranslatef(4, jump_param, character_z_param);
     generateCatto();
   glPopMatrix();
 
@@ -497,6 +529,15 @@ void initGlobalIndicator() {
   already_collided_before.resize(0);
   already_collided_before.resize(15);
   std::fill(std::begin(already_collided_before), std::end(already_collided_before), false);
+
+  throw_params_z.resize(0);
+  throw_params_z.resize(15);
+  std::fill(std::begin(throw_params_z), std::end(throw_params_z), 0.1);
+
+  throw_params_y.resize(0);
+  throw_params_y.resize(15);
+  std::fill(std::begin(throw_params_y), std::end(throw_params_y), 0);
+
 }
 
 void generateObjects() {
@@ -510,176 +551,372 @@ void generateObjects() {
 
   bool collided = false;
 
-  double clip_plane0[] = {1, 0, 0, 3};
-  double clip_plane1[] = {0, 1, 0, -1};
+  double clip_plane0[] = {1, 0, 0, 4};
+  double clip_plane1[] = {0, 1, 0, -2};
   glClipPlane(GL_CLIP_PLANE0, clip_plane0);
 
-  setMaterialColor(0.7, 0.3, 0.3, 1);
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
   glEnable(GL_CLIP_PLANE0);
   
   glPushMatrix();
+    
     if(!already_collided_before[0] && isCollision(character_z_param, 20 - floor_param, objects_z[0])) {
+
       already_collided_before[0] = true;
       score++;
+
+    }
+    if(already_collided_before[0]) {
+
+      if(throw_params_z[0] >= 4.2)
+        throw_params_y[0] += 0.2;
+
+      if(objects_z[0] <= 0)
+        glTranslatef(0, -throw_params_y[0], -throw_params_z[0]);
+      else
+        glTranslatef(0, -throw_params_y[0], throw_params_z[0]);
+      throw_params_z[0] += 0.1;
     }
     glTranslatef(20-floor_param, 1, objects_z[0]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[1] && isCollision(character_z_param, 35 - floor_param, objects_z[1])) {
       already_collided_before[1] = true;
       score++;
     }
+    if(already_collided_before[1]) {
+
+      if(throw_params_z[1] >= 4.2)
+        throw_params_y[1] += 0.2;
+
+      if(objects_z[1] <= 0)
+        glTranslatef(0, -throw_params_y[1], -throw_params_z[1]);
+      else
+        glTranslatef(0, -throw_params_y[1], throw_params_z[1]);
+      throw_params_z[1] += 0.1;
+    }
     glTranslatef(35-floor_param, 1, objects_z[1]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[2] && isCollision(character_z_param, 50 - floor_param, objects_z[2])) {
       already_collided_before[2] = true;
       score++;
     }
+    if(already_collided_before[2]) {
+
+      if(throw_params_z[2] >= 4.2)
+        throw_params_y[2] += 0.2;
+
+      if(objects_z[2] <= 0)
+        glTranslatef(0, -throw_params_y[2], -throw_params_z[2]);
+      else
+        glTranslatef(0, -throw_params_y[2], throw_params_z[2]);
+      throw_params_z[2] += 0.1;
+    }
     glTranslatef(50-floor_param, 1, objects_z[2]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[3] && isCollision(character_z_param, 65 - floor_param, objects_z[3])) {
       already_collided_before[3] = true;
       score++;
     }
+    if(already_collided_before[3]) {
+
+      if(throw_params_z[3] >= 4.2)
+        throw_params_y[3] += 0.2;
+
+      if(objects_z[3] <= 0)
+        glTranslatef(0, -throw_params_y[3], -throw_params_z[3]);
+      else
+        glTranslatef(0, -throw_params_y[3], throw_params_z[3]);
+      throw_params_z[3] += 0.1;
+    }
     glTranslatef(65-floor_param, 1, objects_z[3]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[4] && isCollision(character_z_param, 80 - floor_param, objects_z[4])) {
       already_collided_before[4] = true;
       score++;
     }
+    if(already_collided_before[4]) {
+
+      if(throw_params_z[4] >= 4.2)
+        throw_params_y[4] += 0.2;
+
+      if(objects_z[4] <= 0)
+        glTranslatef(0, -throw_params_y[4], -throw_params_z[4]);
+      else
+        glTranslatef(0, -throw_params_y[4], throw_params_z[4]);
+      throw_params_z[4] += 0.1;
+    }
     glTranslatef(80-floor_param, 1, objects_z[4]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[5] && isCollision(character_z_param, 95 - floor_param, objects_z[5])) {
       already_collided_before[5] = true;
       score++;
     }
+    if(already_collided_before[5]) {
+
+      if(throw_params_z[5] >= 4.2)
+        throw_params_y[5] += 0.2;
+
+      if(objects_z[5] <= 0)
+        glTranslatef(0, -throw_params_y[5], -throw_params_z[5]);
+      else
+        glTranslatef(0, -throw_params_y[5], throw_params_z[5]);
+      throw_params_z[5] += 0.1;
+    }
     glTranslatef(95-floor_param, 1, objects_z[5]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[6] && isCollision(character_z_param, 110 - floor_param, objects_z[6])) {
       already_collided_before[6] = true;
       score++;
     }
+    if(already_collided_before[6]) {
+
+      if(throw_params_z[6] >= 4.2)
+        throw_params_y[6] += 0.2;
+
+      if(objects_z[6] <= 0)
+        glTranslatef(0, -throw_params_y[6], -throw_params_z[6]);
+      else
+        glTranslatef(0, -throw_params_y[6], throw_params_z[6]);
+      throw_params_z[6] += 0.1;
+    }
     glTranslatef(110-floor_param, 1, objects_z[6]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[7] && isCollision(character_z_param, 125 - floor_param, objects_z[7])) {
       already_collided_before[7] = true;
       score++;
     }
+    if(already_collided_before[7]) {
+
+      if(throw_params_z[7] >= 4.2)
+        throw_params_y[7] += 0.2;
+
+      if(objects_z[7] <= 0)
+        glTranslatef(0, -throw_params_y[7], -throw_params_z[7]);
+      else
+        glTranslatef(0, -throw_params_y[7], throw_params_z[7]);
+      throw_params_z[7] += 0.1;
+    }
     glTranslatef(125-floor_param, 1, objects_z[7]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[8] && isCollision(character_z_param, 140 - floor_param, objects_z[8])) {
       already_collided_before[8] = true;
       score++;
     }
+    if(already_collided_before[8]) {
+
+      if(throw_params_z[8] >= 4.2)
+        throw_params_y[8] += 0.2;
+
+      if(objects_z[8] <= 0)
+        glTranslatef(0, -throw_params_y[8], -throw_params_z[8]);
+      else
+        glTranslatef(0, -throw_params_y[8], throw_params_z[8]);
+      throw_params_z[8] += 0.1;
+    }
     glTranslatef(140-floor_param, 1, objects_z[8]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[9] && isCollision(character_z_param, 155 - floor_param, objects_z[9])) {
       already_collided_before[9] = true;
       score++;
     }
+    if(already_collided_before[9]) {
+
+      if(throw_params_z[9] >= 4.2)
+        throw_params_y[9] += 0.2;
+
+      if(objects_z[9] <= 0)
+        glTranslatef(0, -throw_params_y[9], -throw_params_z[9]);
+      else
+        glTranslatef(0, -throw_params_y[9], throw_params_z[9]);
+      throw_params_z[9] += 0.1;
+    }
     glTranslatef(155-floor_param, 1, objects_z[9]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[10] && isCollision(character_z_param, 170 - floor_param, objects_z[10])) {
       already_collided_before[10] = true;
       score++;
     }
+    if(already_collided_before[10]) {
+
+      if(throw_params_z[10] >= 4.2)
+        throw_params_y[10] += 0.2;
+
+      if(objects_z[10] <= 0)
+        glTranslatef(0, -throw_params_y[10], -throw_params_z[10]);
+      else
+        glTranslatef(0, -throw_params_y[10], throw_params_z[10]);
+      throw_params_z[10] += 0.1;
+    }
     glTranslatef(170-floor_param, 1, objects_z[10]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[11] && isCollision(character_z_param, 185 - floor_param, objects_z[11])) {
       already_collided_before[11] = true;
       score++;
     }
+    if(already_collided_before[11]) {
+
+      if(throw_params_z[11] >= 4.2)
+        throw_params_y[11] += 0.2;
+
+      if(objects_z[11] <= 0)
+        glTranslatef(0, -throw_params_y[11], -throw_params_z[11]);
+      else
+        glTranslatef(0, -throw_params_y[11], throw_params_z[11]);
+      throw_params_z[11] += 0.1;
+    }
     glTranslatef(185-floor_param, 1, objects_z[11]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[12] && isCollision(character_z_param, 200 - floor_param, objects_z[12])) {
       already_collided_before[12] = true;
       score++;
     }
+    if(already_collided_before[12]) {
+
+      if(throw_params_z[12] >= 4.2)
+        throw_params_y[12] += 0.2;
+
+      if(objects_z[12] <= 0)
+        glTranslatef(0, -throw_params_y[12], -throw_params_z[12]);
+      else
+        glTranslatef(0, -throw_params_y[12], throw_params_z[12]);
+      throw_params_z[12] += 0.1;
+    }
     glTranslatef(200-floor_param, 1, objects_z[12]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[13] && isCollision(character_z_param, 215 - floor_param, objects_z[13])) {
       already_collided_before[13] = true;
       score++;
     }
+    if(already_collided_before[13]) {
+
+      if(throw_params_z[13] >= 4.2)
+        throw_params_y[13] += 0.2;
+
+      if(objects_z[13] <= 0)
+        glTranslatef(0, -throw_params_y[13], -throw_params_z[13]);
+      else
+        glTranslatef(0, -throw_params_y[13], throw_params_z[13]);
+      throw_params_z[13] += 0.1;
+    }
     glTranslatef(215-floor_param, 1, objects_z[13]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
+
+  setMaterialColor(generateRNZO(), generateRNZO(), generateRNZO(), 1);
 
   glPushMatrix();
     if(!already_collided_before[14] && isCollision(character_z_param, 230 - floor_param, objects_z[14])) {
       already_collided_before[14] = true;
       score++;
     }
+    if(already_collided_before[14]) {
+
+      if(throw_params_z[14] >= 4.2)
+        throw_params_y[14] += 0.2;
+
+      if(objects_z[14] <= 0)
+        glTranslatef(0, -throw_params_y[14], -throw_params_z[14]);
+      else
+        glTranslatef(0, -throw_params_y[14], throw_params_z[14]);
+      throw_params_z[14] += 0.1;
+    }
     glTranslatef(230-floor_param, 1, objects_z[14]);
     glRotatef(objects_rotation_param, 0, 1, 0);
     glScalef(0.3, 0.3, 0.3);
-    glutWireDodecahedron();
+    glutSolidDodecahedron();
   glPopMatrix();
 
 

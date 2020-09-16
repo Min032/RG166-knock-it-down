@@ -13,6 +13,7 @@ extern double objects_rotation_param;
 extern int score;
 extern int game_ongoing;
 extern int current_level;
+extern int game_finished;
 
 void drawAxis(int n);
 
@@ -28,6 +29,7 @@ void drawMainPolygon();
 void generateMenu();
 void generateScore();
 void generateLevelResolve();
+void generateFinisher();
 
 void generateTexturedPlatform();
 void generateWholePlatform();

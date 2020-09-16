@@ -5,10 +5,10 @@
 #include <cmath>
 
 #define TIMER0_ID 0
-#define TIMER0_INTERVAL 25
+#define TIMER0_INTERVAL 5
 
 #define TIMER1_ID 1
-#define TIMER1_INTERVAL 25
+#define TIMER1_INTERVAL 5
 
 #define DEBUG_MODE 0
 
@@ -33,12 +33,13 @@ double back_legs_angle_increment = 8;
 double jump_param = 0;
 double jump_param_increment = 0.11;
 double floor_param = 0;
-double floor_increment = 0.2;
+double floor_increment = 0.1;
 
 double character_z_param = 0;
 double objects_rotation_param = 0;
 
 int current_level = 1;
+int game_finished = 0;
 
 int score = 0;
 
@@ -48,7 +49,7 @@ void initLights()
   glEnable(GL_LIGHTING);
 
   GLfloat light_position[] = { 12, 16, 10, 0 };
-  GLfloat light_ambient[] = { 0.3, 0.3, 0.3, 1 };
+  GLfloat light_ambient[] = { 0.5, 0.5, 0.5, 1 };
 	GLfloat light_diffuse[] = { 0.9, 0.9, 0.9, 1 };
 	GLfloat light_specular[] = { 0, 0, 0, 1 };
 
@@ -98,6 +99,7 @@ void initParams() {
 
   score = 0;
 
+  game_finished = 0;
   game_ongoing = 0;
 }
 
@@ -146,6 +148,11 @@ void on_timer0(int id) {
       objects_rotation_param = 0;
 
     objects_rotation_param += 3;
+
+    if(current_level == 3) {
+      game_finished = 1;
+      game_ongoing = 0;
+    }
 
     glutPostRedisplay();
 
@@ -251,13 +258,13 @@ void onKeyboard(unsigned char key, int x, int y)
     case 'a':
     case 'A':
       if(game_ongoing && character_z_param >= -3.5)
-        character_z_param -= 0.1;
+        character_z_param -= 0.2;
       glutPostRedisplay();
       break;
     case 'd':
     case 'D':
       if(game_ongoing && character_z_param <= 3.5)
-        character_z_param += 0.1;
+        character_z_param += 0.2;
       glutPostRedisplay();
       break;
   }
@@ -288,9 +295,9 @@ void onDisplay(void)
 
   if(!DEBUG_MODE) 
     if(!game_ongoing)
-      gluLookAt(6, 5, 5, 0, 0, 0, 0, 1, 0);
+      gluLookAt(10, 9, 9, 0, 0, 0, 0, 1, 0);
     else 
-      gluLookAt(-7, 6, 0, 0, 3, 0, 0, 1, 0);
+      gluLookAt(-4, 5, 0, 3, 3, 0, 0, 1, 0);
   else
     gluLookAt(cam_param_x, cam_param_y, cam_param_z, 0, 0, 0, 0, 1, 0);
 
@@ -324,11 +331,15 @@ void onDisplay(void)
 
   glPopMatrix();
 
-  generateScore();
+  if(!game_finished)
+    generateScore();
 
   glPushMatrix();
-    if(!game_ongoing) {
+    if(!game_ongoing && !game_finished) {
       generateMenu();
+    }
+    else if(game_finished) {
+      generateFinisher();
     }
   glPopMatrix();
 
