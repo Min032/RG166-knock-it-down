@@ -25,3 +25,5 @@ Knock It Down is a simple finite runner made in OpenGL. Basically, you're a cat.
    ```bash
    ./Knock
    ```
+   
+![How the game looks](https://i.imgur.com/bA65mVl.png)
