@@ -147,7 +147,7 @@ void on_timer0(int id) {
 
     objects_rotation_param += 3;
 
-    if(current_level == 3) {
+    if(current_level == 20) {
       game_finished = 1;
       game_ongoing = 0;
     }
