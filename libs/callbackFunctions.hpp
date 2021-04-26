@@ -9,7 +9,7 @@ void initMaterial();
 // Reset the game to starting state
 void initParams();
 
-void onDisplay(void);
+void onDisplay();
 void onKeyboard(unsigned char key, int x, int y);
 void onKeyboardSpecial(int key, int x, int y); 
 void onReshape(int width, int height);

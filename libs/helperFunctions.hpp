@@ -13,12 +13,12 @@ void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 void drawRomanString(char *str, double x, double y, double z);
 
 // 15 randomly generated numbers in a range  
-std::vector<double> generateRangedNumbers(double min, double max);
+auto generateRangedNumbers(double min, double max) -> std::vector<double>;
 
 // 1 randomly generated number in (0, 1)
-double generateRNZO();
+auto generateRNZO() -> double;
 
 // Collision detection for cat and object
-bool isCollision(double catZ, double objX, double objZ);
+auto isCollision(double catZ, double objX, double objZ) -> bool;
 
 #endif

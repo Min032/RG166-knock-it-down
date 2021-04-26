@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 #include <vector>
-#include <string.h>
+#include <cstring>
 
 // Texture IDs
 static GLuint names[2];
@@ -20,14 +20,14 @@ std::vector<double> throw_params_y(0);
 
 void initTextures()
 {
-  Image *image;
+  Image *image = nullptr;
 
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
 
   glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE);
 
-  glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE, 4.0f);
-  glTexEnvf(GL_TEXTURE_ENV, GL_ALPHA_SCALE, 4.0f);
+  glTexEnvf(GL_TEXTURE_ENV, GL_RGB_SCALE, 4.0F);
+  glTexEnvf(GL_TEXTURE_ENV, GL_ALPHA_SCALE, 4.0F);
 
 
   glGenTextures(2, names);
@@ -136,12 +136,13 @@ void generateScore() {
   score_string = "Score: ";
   score_string.append(std::to_string(score));
 
-  char *tmp = (char *)score_string.c_str();
+  char *tmp = const_cast<char *>(score_string.c_str());
 
-  if(!game_ongoing)
+  if(!game_ongoing) {
     drawRomanString(tmp, 4.1, 7.4, -3.85);
-  else
+  } else {
     drawRomanString(tmp, 3, 6.35, 3.05);
+}
 }
 
 void generateLevelResolve() {
@@ -150,7 +151,7 @@ void generateLevelResolve() {
   level_string = "Current level: ";
   level_string.append(std::to_string(current_level));
 
-  char *tmp = (char *)level_string.c_str();
+  char *tmp = const_cast<char *>(level_string.c_str());
 
   drawRomanString(tmp, 3, 6.35, -3.2);
 }
@@ -162,7 +163,7 @@ void generateFinisher() {
   score_string = "Score: ";
   score_string.append(std::to_string(score));
 
-  char *tmp = (char *)score_string.c_str();
+  char *tmp = const_cast<char *>(score_string.c_str());
 
   drawRomanString("You have finished!", 4.1, 7, 5.2);
   drawRomanString(tmp, 4.1, 6.5, 5);
@@ -568,13 +569,15 @@ void generateObjects() {
     }
     if(already_collided_before[0]) {
 
-      if(throw_params_z[0] >= 4.2)
+      if(throw_params_z[0] >= 4.2) {
         throw_params_y[0] += 0.2;
+}
 
-      if(objects_z[0] <= 0)
+      if(objects_z[0] <= 0) {
         glTranslatef(0, -throw_params_y[0], -throw_params_z[0]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[0], throw_params_z[0]);
+}
       throw_params_z[0] += 0.1;
     }
     glTranslatef(20-floor_param, 1, objects_z[0]);
@@ -592,13 +595,15 @@ void generateObjects() {
     }
     if(already_collided_before[1]) {
 
-      if(throw_params_z[1] >= 4.2)
+      if(throw_params_z[1] >= 4.2) {
         throw_params_y[1] += 0.2;
+}
 
-      if(objects_z[1] <= 0)
+      if(objects_z[1] <= 0) {
         glTranslatef(0, -throw_params_y[1], -throw_params_z[1]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[1], throw_params_z[1]);
+}
       throw_params_z[1] += 0.1;
     }
     glTranslatef(35-floor_param, 1, objects_z[1]);
@@ -616,13 +621,15 @@ void generateObjects() {
     }
     if(already_collided_before[2]) {
 
-      if(throw_params_z[2] >= 4.2)
+      if(throw_params_z[2] >= 4.2) {
         throw_params_y[2] += 0.2;
+}
 
-      if(objects_z[2] <= 0)
+      if(objects_z[2] <= 0) {
         glTranslatef(0, -throw_params_y[2], -throw_params_z[2]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[2], throw_params_z[2]);
+}
       throw_params_z[2] += 0.1;
     }
     glTranslatef(50-floor_param, 1, objects_z[2]);
@@ -640,13 +647,15 @@ void generateObjects() {
     }
     if(already_collided_before[3]) {
 
-      if(throw_params_z[3] >= 4.2)
+      if(throw_params_z[3] >= 4.2) {
         throw_params_y[3] += 0.2;
+}
 
-      if(objects_z[3] <= 0)
+      if(objects_z[3] <= 0) {
         glTranslatef(0, -throw_params_y[3], -throw_params_z[3]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[3], throw_params_z[3]);
+}
       throw_params_z[3] += 0.1;
     }
     glTranslatef(65-floor_param, 1, objects_z[3]);
@@ -664,13 +673,15 @@ void generateObjects() {
     }
     if(already_collided_before[4]) {
 
-      if(throw_params_z[4] >= 4.2)
+      if(throw_params_z[4] >= 4.2) {
         throw_params_y[4] += 0.2;
+}
 
-      if(objects_z[4] <= 0)
+      if(objects_z[4] <= 0) {
         glTranslatef(0, -throw_params_y[4], -throw_params_z[4]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[4], throw_params_z[4]);
+}
       throw_params_z[4] += 0.1;
     }
     glTranslatef(80-floor_param, 1, objects_z[4]);
@@ -688,13 +699,15 @@ void generateObjects() {
     }
     if(already_collided_before[5]) {
 
-      if(throw_params_z[5] >= 4.2)
+      if(throw_params_z[5] >= 4.2) {
         throw_params_y[5] += 0.2;
+}
 
-      if(objects_z[5] <= 0)
+      if(objects_z[5] <= 0) {
         glTranslatef(0, -throw_params_y[5], -throw_params_z[5]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[5], throw_params_z[5]);
+}
       throw_params_z[5] += 0.1;
     }
     glTranslatef(95-floor_param, 1, objects_z[5]);
@@ -712,13 +725,15 @@ void generateObjects() {
     }
     if(already_collided_before[6]) {
 
-      if(throw_params_z[6] >= 4.2)
+      if(throw_params_z[6] >= 4.2) {
         throw_params_y[6] += 0.2;
+}
 
-      if(objects_z[6] <= 0)
+      if(objects_z[6] <= 0) {
         glTranslatef(0, -throw_params_y[6], -throw_params_z[6]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[6], throw_params_z[6]);
+}
       throw_params_z[6] += 0.1;
     }
     glTranslatef(110-floor_param, 1, objects_z[6]);
@@ -736,13 +751,15 @@ void generateObjects() {
     }
     if(already_collided_before[7]) {
 
-      if(throw_params_z[7] >= 4.2)
+      if(throw_params_z[7] >= 4.2) {
         throw_params_y[7] += 0.2;
+}
 
-      if(objects_z[7] <= 0)
+      if(objects_z[7] <= 0) {
         glTranslatef(0, -throw_params_y[7], -throw_params_z[7]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[7], throw_params_z[7]);
+}
       throw_params_z[7] += 0.1;
     }
     glTranslatef(125-floor_param, 1, objects_z[7]);
@@ -760,13 +777,15 @@ void generateObjects() {
     }
     if(already_collided_before[8]) {
 
-      if(throw_params_z[8] >= 4.2)
+      if(throw_params_z[8] >= 4.2) {
         throw_params_y[8] += 0.2;
+}
 
-      if(objects_z[8] <= 0)
+      if(objects_z[8] <= 0) {
         glTranslatef(0, -throw_params_y[8], -throw_params_z[8]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[8], throw_params_z[8]);
+}
       throw_params_z[8] += 0.1;
     }
     glTranslatef(140-floor_param, 1, objects_z[8]);
@@ -784,13 +803,15 @@ void generateObjects() {
     }
     if(already_collided_before[9]) {
 
-      if(throw_params_z[9] >= 4.2)
+      if(throw_params_z[9] >= 4.2) {
         throw_params_y[9] += 0.2;
+}
 
-      if(objects_z[9] <= 0)
+      if(objects_z[9] <= 0) {
         glTranslatef(0, -throw_params_y[9], -throw_params_z[9]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[9], throw_params_z[9]);
+}
       throw_params_z[9] += 0.1;
     }
     glTranslatef(155-floor_param, 1, objects_z[9]);
@@ -808,13 +829,15 @@ void generateObjects() {
     }
     if(already_collided_before[10]) {
 
-      if(throw_params_z[10] >= 4.2)
+      if(throw_params_z[10] >= 4.2) {
         throw_params_y[10] += 0.2;
+}
 
-      if(objects_z[10] <= 0)
+      if(objects_z[10] <= 0) {
         glTranslatef(0, -throw_params_y[10], -throw_params_z[10]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[10], throw_params_z[10]);
+}
       throw_params_z[10] += 0.1;
     }
     glTranslatef(170-floor_param, 1, objects_z[10]);
@@ -832,13 +855,15 @@ void generateObjects() {
     }
     if(already_collided_before[11]) {
 
-      if(throw_params_z[11] >= 4.2)
+      if(throw_params_z[11] >= 4.2) {
         throw_params_y[11] += 0.2;
+}
 
-      if(objects_z[11] <= 0)
+      if(objects_z[11] <= 0) {
         glTranslatef(0, -throw_params_y[11], -throw_params_z[11]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[11], throw_params_z[11]);
+}
       throw_params_z[11] += 0.1;
     }
     glTranslatef(185-floor_param, 1, objects_z[11]);
@@ -856,13 +881,15 @@ void generateObjects() {
     }
     if(already_collided_before[12]) {
 
-      if(throw_params_z[12] >= 4.2)
+      if(throw_params_z[12] >= 4.2) {
         throw_params_y[12] += 0.2;
+}
 
-      if(objects_z[12] <= 0)
+      if(objects_z[12] <= 0) {
         glTranslatef(0, -throw_params_y[12], -throw_params_z[12]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[12], throw_params_z[12]);
+}
       throw_params_z[12] += 0.1;
     }
     glTranslatef(200-floor_param, 1, objects_z[12]);
@@ -880,13 +907,15 @@ void generateObjects() {
     }
     if(already_collided_before[13]) {
 
-      if(throw_params_z[13] >= 4.2)
+      if(throw_params_z[13] >= 4.2) {
         throw_params_y[13] += 0.2;
+}
 
-      if(objects_z[13] <= 0)
+      if(objects_z[13] <= 0) {
         glTranslatef(0, -throw_params_y[13], -throw_params_z[13]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[13], throw_params_z[13]);
+}
       throw_params_z[13] += 0.1;
     }
     glTranslatef(215-floor_param, 1, objects_z[13]);
@@ -904,13 +933,15 @@ void generateObjects() {
     }
     if(already_collided_before[14]) {
 
-      if(throw_params_z[14] >= 4.2)
+      if(throw_params_z[14] >= 4.2) {
         throw_params_y[14] += 0.2;
+}
 
-      if(objects_z[14] <= 0)
+      if(objects_z[14] <= 0) {
         glTranslatef(0, -throw_params_y[14], -throw_params_z[14]);
-      else
+      } else {
         glTranslatef(0, -throw_params_y[14], throw_params_z[14]);
+}
       throw_params_z[14] += 0.1;
     }
     glTranslatef(230-floor_param, 1, objects_z[14]);

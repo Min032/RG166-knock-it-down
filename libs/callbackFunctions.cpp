@@ -104,32 +104,39 @@ void initParams() {
 }
 
 void on_timer0(int id) {
-  if (id != TIMER0_ID) return;
+  if (id != TIMER0_ID) { return;
+}
 
     // Parameters for front legs (running animation)
-    if(front_legs_angle_param >= 18)
+    if(front_legs_angle_param >= 18) {
       front_legs_angle_increment = -8;
+}
     
-    if(front_legs_angle_param <= -60)
+    if(front_legs_angle_param <= -60) {
       front_legs_angle_increment = 8;
+}
     
     front_legs_angle_param += front_legs_angle_increment;
 
     // Parameters for back legs (running animation)
-    if(back_legs_angle_param >= 18)
+    if(back_legs_angle_param >= 18) {
       back_legs_angle_increment = -8;
+}
     
-    if(back_legs_angle_param <= -60)
+    if(back_legs_angle_param <= -60) {
       back_legs_angle_increment = 8;
+}
 
     back_legs_angle_param += front_legs_angle_increment;
     
     // Parameters for jumping (running animation)
-    if(jump_param >= 1)
+    if(jump_param >= 1) {
       jump_param_increment = -0.11;
+}
 
-    if(jump_param <= 0)
+    if(jump_param <= 0) {
       jump_param_increment = 0.11;
+}
 
     jump_param += jump_param_increment;
 
@@ -142,8 +149,9 @@ void on_timer0(int id) {
 
     floor_param += floor_increment;
 
-    if(objects_rotation_param >= 360)
+    if(objects_rotation_param >= 360) {
       objects_rotation_param = 0;
+}
 
     objects_rotation_param += 3;
 
@@ -160,11 +168,13 @@ void on_timer0(int id) {
 }
 
 void on_timer1(int id) {
-  if (id != TIMER1_ID) return;
+  if (id != TIMER1_ID) { return;
+}
 
   // Menu rotation animation parameter
-  if(rotation_y_menu_param >= 360)
+  if(rotation_y_menu_param >= 360) {
     rotation_y_menu_param = 0;
+}
 
   rotation_y_menu_param += 0.4;
 
@@ -175,7 +185,7 @@ void on_timer1(int id) {
   }
 }
 
-void onKeyboardSpecial(int key, int x, int y) 
+void onKeyboardSpecial(int key, int  /*x*/, int  /*y*/) 
 {
   switch(key)
   {
@@ -212,7 +222,7 @@ void onKeyboardSpecial(int key, int x, int y)
 
 }
 
-void onKeyboard(unsigned char key, int x, int y)
+void onKeyboard(unsigned char key, int  /*x*/, int  /*y*/)
 {
   switch(key)
   {
@@ -255,14 +265,16 @@ void onKeyboard(unsigned char key, int x, int y)
       break;
     case 'a':
     case 'A':
-      if(game_ongoing && character_z_param >= -3.5)
+      if(game_ongoing && character_z_param >= -3.5) {
         character_z_param -= 0.2;
+}
       glutPostRedisplay();
       break;
     case 'd':
     case 'D':
-      if(game_ongoing && character_z_param <= 3.5)
+      if(game_ongoing && character_z_param <= 3.5) {
         character_z_param += 0.2;
+}
       glutPostRedisplay();
       break;
   }
@@ -278,7 +290,7 @@ void onReshape(int width, int height)
 }
 
 
-void onDisplay(void)
+void onDisplay()
 {
 
   initLights();
@@ -291,13 +303,15 @@ void onDisplay(void)
 	glLoadIdentity();
 
 
-  if(!DEBUG_MODE) 
-    if(!game_ongoing)
+  if(!DEBUG_MODE) { 
+    if(!game_ongoing) {
       gluLookAt(10, 9, 9, 0, 0, 0, 0, 1, 0);
-    else 
+    } else { 
       gluLookAt(-4, 5, 0, 3, 3, 0, 0, 1, 0);
-  else
+}
+  } else {
     gluLookAt(cam_param_x, cam_param_y, cam_param_z, 0, 0, 0, 0, 1, 0);
+}
 
   glEnable(GL_LIGHT1);
 
@@ -312,12 +326,14 @@ void onDisplay(void)
   }
     
   glPushMatrix();
-  if(!game_ongoing)
+  if(!game_ongoing) {
     glRotatef(rotation_y_menu_param, 0, 1, 0);
+}
   generateWholePlatform();
 
-  if(game_ongoing)
+  if(game_ongoing) {
     generateObjects();
+}
   
   glDisable(GL_LIGHT1);
   glEnable(GL_LIGHT0);
@@ -329,8 +345,9 @@ void onDisplay(void)
 
   glPopMatrix();
 
-  if(!game_finished)
+  if(!game_finished) {
     generateScore();
+}
 
   glPushMatrix();
     if(!game_ongoing && !game_finished) {

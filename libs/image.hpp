@@ -5,15 +5,15 @@
  * Dve strukture koje opisuju strukturu dva zaglavlja
  * kojima pocinje svaka slika u bmp formatu.
  */
-typedef struct {
+using BITMAPFILEHEADER = struct {
   unsigned short type;
   unsigned int size;
   unsigned short reserved1;
   unsigned short reserved2;
   unsigned int offsetbits;
-} BITMAPFILEHEADER;
+};
 
-typedef struct {
+using BITMAPINFOHEADER = struct {
   unsigned int size;
   unsigned int width;
   unsigned int height;
@@ -25,14 +25,14 @@ typedef struct {
   int ypelspermeter;
   unsigned int colorsused;
   unsigned int colorsimportant;
-} BITMAPINFOHEADER;
+};
 
-typedef struct Image {
+using Image = struct Image {
   int width, height; 
   char *pixels; 
-} Image;
+};
 
-Image *image_init(int width, int height);
+auto image_init(int width, int height) -> Image *;
 
 void image_done(Image *image);
 

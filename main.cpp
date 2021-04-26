@@ -4,13 +4,13 @@
 
 #include "libs/callbackFunctions.hpp"
 
-void onDisplay(void);
+void onDisplay();
 void onKeyboard(unsigned char key, int x, int y);
 void onReshape(int width, int height);
 
 void initEnables();
 
-int main(int argc, char **argv)
+auto main(int argc, char **argv) -> int
 {
   const char *gameName = "Knock it down!";
 
@@ -45,5 +45,5 @@ void initEnables()
   glEnable(GL_NORMALIZE);
   glEnable(GL_TEXTURE_2D);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  srand(time(NULL));
+  srand(time(nullptr));
 }
