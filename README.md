@@ -7,6 +7,7 @@ Knock It Down is a simple finite runner made in OpenGL. Basically, you're a cat.
 Project for **Computer Graphics** course at **Faculty of Mathematics, University of Belgrade**.</br>
 Written in: **C++**</br>
 Libraries used: **OpenGL, glut**</br>
+Tools used: **CMake**</br>
 Date: **Summer 2020**</br>
 
 ## ❔ How to play
@@ -19,17 +20,29 @@ Date: **Summer 2020**</br>
 
 2. Enter the directory:
     ```bash
-    cd RG166-knock-it-down
+    cd Knock-it-down
     ```
 
-3. Run Makefile:
+3. Make build dir and enter it:
     ```bash
-    make
+    mkdir build
+    cd build
     ```
 
-4. Start the game:
+4. Run cmake:
    ```bash
-   ./Knock
+   cmake ./..
    ```
+   
+5. Run Makefile:
+   ```bash
+   make
+   ```
+   
+6. Run the game:
+   ```bash
+   ./game
+   ``` 
+
    
 ![How the game looks](https://i.imgur.com/bA65mVl.png)
