@@ -10,8 +10,8 @@
 static GLuint names[2];
 
 // Textures files names
-#define FILENAME0 "resources/orr.bmp"
-#define FILENAME1 "resources/floor.bmp"
+#define FILENAME0 "../resources/orr.bmp"
+#define FILENAME1 "../resources/floor.bmp"
 
 std::vector<double> objects_z(0);
 std::vector<bool> already_collided_before(0);

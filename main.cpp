@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include <string>
 
-#include "callbackFunctions.hpp"
+#include "libs/callbackFunctions.hpp"
 
 void onDisplay(void);
 void onKeyboard(unsigned char key, int x, int y);
