@@ -4,46 +4,48 @@
 
 #include "libs/callbackFunctions.hpp"
 
-void onDisplay();
-void onKeyboard(unsigned char key, int x, int y);
-void onReshape(int width, int height);
+void onDisplay ();
+void onKeyboard (unsigned char key, int x, int y);
+void onReshape (int width, int height);
 
-void initEnables();
+void initEnables ();
 
-auto main(int argc, char **argv) -> int
+auto
+main (int argc, char **argv) -> int
 {
-  const char *gameName = "Knock it down!";
+	const char *gameName = "Knock it down!";
 
-  // Glut initialization
-  glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	// Glut initialization
+	glutInit (&argc, argv);
+	glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
-  // Creating the window
-  glutInitWindowPosition(100, 100);
-  glutInitWindowSize(1280, 768);
-  glutCreateWindow(gameName);
+	// Creating the window
+	glutInitWindowPosition (100, 100);
+	glutInitWindowSize (1280, 768);
+	glutCreateWindow (gameName);
 
-  // Callback functions init
-  glutKeyboardFunc(onKeyboard);
-  glutReshapeFunc(onReshape);
-  glutDisplayFunc(onDisplay);
-  glutSpecialFunc(onKeyboardSpecial);
+	// Callback functions init
+	glutKeyboardFunc (onKeyboard);
+	glutReshapeFunc (onReshape);
+	glutDisplayFunc (onDisplay);
+	glutSpecialFunc (onKeyboardSpecial);
 
-  // OpenGL init
-  initEnables();
+	// OpenGL init
+	initEnables ();
 
-  glutMainLoop();
+	glutMainLoop ();
 
-  return 0;
+	return 0;
 }
 
-void initEnables()
+void
+initEnables ()
 {
-  glClearColor(0.0, 0.0, 0.0, 0.0);
-  glEnable(GL_DEPTH_TEST);
-  
-  glEnable(GL_NORMALIZE);
-  glEnable(GL_TEXTURE_2D);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  srand(time(nullptr));
+	glClearColor (0.0, 0.0, 0.0, 0.0);
+	glEnable (GL_DEPTH_TEST);
+
+	glEnable (GL_NORMALIZE);
+	glEnable (GL_TEXTURE_2D);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	srand (time (nullptr));
 }

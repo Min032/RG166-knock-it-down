@@ -7,18 +7,18 @@
 #include <string>
 #include <vector>
 
-void setMaterialColor(GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
+void setMaterialColor (GLfloat r, GLfloat g, GLfloat b, GLfloat alpha);
 
 // Drawing a string on a certain coordinates
-void drawRomanString(char *str, double x, double y, double z);
+void drawRomanString (char *str, double x, double y, double z);
 
-// 15 randomly generated numbers in a range  
-auto generateRangedNumbers(double min, double max) -> std::vector<double>;
+// 15 randomly generated numbers in a range
+auto generateRangedNumbers (double min, double max) -> std::vector<double>;
 
 // 1 randomly generated number in (0, 1)
-auto generateRNZO() -> double;
+auto generateRNZO () -> double;
 
 // Collision detection for cat and object
-auto isCollision(double catZ, double objX, double objZ) -> bool;
+auto isCollision (double catZ, double objX, double objZ) -> bool;
 
 #endif
